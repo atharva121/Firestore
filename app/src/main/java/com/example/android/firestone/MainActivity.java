@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void updateDescrption(View v){
+    public void updateDescription(View v){
         String description = editTextDescription.getText().toString();
         //Map<String , Object> info = new HashMap<>();
         //info.put(KEY_DESCRIPTION, description);
