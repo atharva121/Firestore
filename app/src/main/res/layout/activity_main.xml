@@ -32,6 +32,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="updateDescription"
+        android:text="Update description"
+        android:id="@+id/button_update_description"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="loadInfo"
         android:text="Load"
         android:id="@+id/button_load_info"/>

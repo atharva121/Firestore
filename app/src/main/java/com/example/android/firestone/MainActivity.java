@@ -16,6 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.SetOptions;
 
 import org.w3c.dom.Text;
 
@@ -112,5 +113,13 @@ public class MainActivity extends AppCompatActivity {
                         Log.d(TAG, e.toString());
                     }
                 });
+    }
+
+    public void updateDescrption(View v){
+        String description = editTextDescription.getText().toString();
+        //Map<String , Object> info = new HashMap<>();
+        //info.put(KEY_DESCRIPTION, description);
+        //infoRef.set(info, SetOptions.merge());
+        infoRef.update(KEY_DESCRIPTION, description);
     }
 }
