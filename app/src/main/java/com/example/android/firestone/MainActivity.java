@@ -61,9 +61,13 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 if (documentSnapshot.exists()){
-                    String title = documentSnapshot.getString(KEY_TITLE);
+                    /*String title = documentSnapshot.getString(KEY_TITLE);
                     String description = documentSnapshot.getString(KEY_DESCRIPTION);
                     //Map<String, Object> info = documentSnapshot.getData();
+                    textViewData.setText("Title: " + title + "\n" + "Description: " + description);*/
+                    Item item = documentSnapshot.toObject(Item.class);
+                    String title = item.getTitle();
+                    String description = item.getDescription();
                     textViewData.setText("Title: " + title + "\n" + "Description: " + description);
                 }else {
                     textViewData.setText("There is no Document because you killed it!");
@@ -75,10 +79,13 @@ public class MainActivity extends AppCompatActivity {
     public void saveInfo(View v){
         String title = editTextTitle.getText().toString();
         String description = editTextDescription.getText().toString();
-        Map<String, Object> info = new HashMap<>();
+        /*Map<String, Object> info = new HashMap<>();
         info.put(KEY_TITLE, title);
-        info.put(KEY_DESCRIPTION, description);
-        infoRef.set(info)
+        info.put(KEY_DESCRIPTION, description);*/
+        Item item = new Item();
+        item.setTitle(title);
+        item.setDescription(description);
+        infoRef.set(item)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -100,9 +107,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()){
-                            String title = documentSnapshot.getString(KEY_TITLE);
+                            /*String title = documentSnapshot.getString(KEY_TITLE);
                             String description = documentSnapshot.getString(KEY_DESCRIPTION);
-                            //Map<String, Object> info = documentSnapshot.getData();
+                            //Map<String, Object> info = documentSnapshot.getData();*/
+                            Item item = documentSnapshot.toObject(Item.class);
+                            String title = item.getTitle();
+                            String description = item.getDescription();
                             textViewData.setText("Title: " + title + "\n" + "Description: " + description);
                         }else{
                             Toast.makeText(MainActivity.this, "There is no such document!", Toast.LENGTH_SHORT).show();
