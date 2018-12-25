@@ -11,12 +11,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import org.w3c.dom.Text;
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextDescription;
     private TextView textViewData;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference itemRef = db.collection("Information");
     private DocumentReference infoRef = db.document("Information/Item information");
 
 
@@ -52,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        infoRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+        /*infoRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null){
@@ -61,10 +65,10 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 if (documentSnapshot.exists()){
-                    /*String title = documentSnapshot.getString(KEY_TITLE);
+                    *//*String title = documentSnapshot.getString(KEY_TITLE);
                     String description = documentSnapshot.getString(KEY_DESCRIPTION);
                     //Map<String, Object> info = documentSnapshot.getData();
-                    textViewData.setText("Title: " + title + "\n" + "Description: " + description);*/
+                    textViewData.setText("Title: " + title + "\n" + "Description: " + description);*//*
                     Item item = documentSnapshot.toObject(Item.class);
                     String title = item.getTitle();
                     String description = item.getDescription();
@@ -73,10 +77,31 @@ public class MainActivity extends AppCompatActivity {
                     textViewData.setText("There is no Document because you killed it!");
                 }
             }
+        });*/
+        itemRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Toast.makeText(MainActivity.this, "Error while loading!", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, e.toString());
+                    return;
+                }
+
+                String data = "";
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                    Item item = documentSnapshot.toObject(Item.class);
+                    item.setId(documentSnapshot.getId());
+                    String id = item.getId();
+                    String title = item.getTitle();
+                    String description = item.getDescription();
+                    data += "Id: " + id + "\nTitle: " + title + "\nDescription: " + description + "\n\n";
+                }
+                textViewData.setText(data);
+            }
         });
     }
 
-    public void saveInfo(View v){
+    public void addItem(View v){
         String title = editTextTitle.getText().toString();
         String description = editTextDescription.getText().toString();
         /*Map<String, Object> info = new HashMap<>();
@@ -85,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         Item item = new Item();
         item.setTitle(title);
         item.setDescription(description);
-        infoRef.set(item)
+        /*infoRef.set(item)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -98,18 +123,19 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Error occured while saving!", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, e.toString());
                     }
-                });
+                });*/
+        itemRef.add(item);
     }
 
     public void loadInfo(View v){
-        infoRef.get()
+        /*infoRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()){
-                            /*String title = documentSnapshot.getString(KEY_TITLE);
+                            *//*String title = documentSnapshot.getString(KEY_TITLE);
                             String description = documentSnapshot.getString(KEY_DESCRIPTION);
-                            //Map<String, Object> info = documentSnapshot.getData();*/
+                            //Map<String, Object> info = documentSnapshot.getData();*//*
                             Item item = documentSnapshot.toObject(Item.class);
                             String title = item.getTitle();
                             String description = item.getDescription();
@@ -125,10 +151,26 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Error loading!", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, e.toString());
                     }
+                });*/
+        itemRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        String data = "";
+                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            Item item = documentSnapshot.toObject(Item.class);
+                            item.setId(documentSnapshot.getId());
+                            String id = item.getId();
+                            String title = item.getTitle();
+                            String description = item.getDescription();
+                            data += "Id: " + id + "\nTitle: " + title + "\nDescription: " + description + "\n\n";
+                        }
+                        textViewData.setText(data);
+                    }
                 });
     }
 
-    public void updateDescription(View v){
+   /* public void updateDescription(View v){
         String description = editTextDescription.getText().toString();
         //Map<String , Object> info = new HashMap<>();
         //info.put(KEY_DESCRIPTION, description);
@@ -137,13 +179,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deleteDescription(View v){
-        /*Map<String,Object> info = new HashMap<>();
+        *//*Map<String,Object> info = new HashMap<>();
         info.put(KEY_DESCRIPTION, FieldValue.delete());
-        infoRef.update(info);*/
+        infoRef.update(info);*//*
         infoRef.update(KEY_DESCRIPTION, FieldValue.delete());
     }
 
     public void deleteItem(View v){
         infoRef.delete();
-    }
+    }*/
 }
