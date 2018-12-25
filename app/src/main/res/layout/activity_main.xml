@@ -32,6 +32,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="loadInfo"
+        android:text="Load"
+        android:id="@+id/button_load_info"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:onClick="updateDescription"
         android:text="Update description"
         android:id="@+id/button_update_description"/>
@@ -39,9 +46,16 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="loadInfo"
-        android:text="Load"
-        android:id="@+id/button_load_info"/>
+        android:onClick="deleteDescription"
+        android:text="Delete description"
+        android:id="@+id/button_delete_description"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="deleteItem"
+        android:text="Delete item"
+        android:id="@+id/button_delete_item"/>
 
     <TextView
         android:layout_width="wrap_content"

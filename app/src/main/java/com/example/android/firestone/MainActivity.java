@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.SetOptions;
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
                     String description = documentSnapshot.getString(KEY_DESCRIPTION);
                     //Map<String, Object> info = documentSnapshot.getData();
                     textViewData.setText("Title: " + title + "\n" + "Description: " + description);
+                }else {
+                    textViewData.setText("There is no Document because you killed it!");
                 }
             }
         });
@@ -121,5 +124,16 @@ public class MainActivity extends AppCompatActivity {
         //info.put(KEY_DESCRIPTION, description);
         //infoRef.set(info, SetOptions.merge());
         infoRef.update(KEY_DESCRIPTION, description);
+    }
+
+    public void deleteDescription(View v){
+        /*Map<String,Object> info = new HashMap<>();
+        info.put(KEY_DESCRIPTION, FieldValue.delete());
+        infoRef.update(info);*/
+        infoRef.update(KEY_DESCRIPTION, FieldValue.delete());
+    }
+
+    public void deleteItem(View v){
+        infoRef.delete();
     }
 }
